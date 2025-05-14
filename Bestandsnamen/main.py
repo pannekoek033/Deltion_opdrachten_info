@@ -1,3 +1,5 @@
-#import psutil
+import os
 
-print(psutil.cpu_times())
+map_pad = "C:\git\Opdrachten\Deltion_opdrachten_Informatie\Bestandsnamen\afbeeldingen\movie_posters"
+
+os.listdir(map_pad)
