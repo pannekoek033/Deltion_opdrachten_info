@@ -24,3 +24,25 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# Vraag om de mapnaam
+mapnaam = input("Voer de mapnaam in met afbeeldingen: ").strip()
+
+# Controleer of de map bestaat
+if not os.path.isdir(mapnaam):
+    print("Map bestaat niet.")
+    exit()
+
+# Alleen afbeeldingsbestanden
+extensies = ('.jpg', '.jpeg', '.png', '.gif', '.bmp')
+bestanden = [f for f in os.listdir(mapnaam) if f.lower().endswith(extensies)]
+
+# Hernoem bestanden en schrijf naar tekstbestand
+with open("bestanden.txt", "w", encoding="utf-8") as f:
+    for i, oud in enumerate(bestanden, 1):
+        _, ext = os.path.splitext(oud)
+        nieuw = f"movie_poster_{i}{ext}"
+        os.rename(os.path.join(mapnaam, oud), os.path.join(mapnaam, nieuw))
+        f.write(nieuw + "\n")
+
+print("Bestanden zijn hernoemd en opgeslagen in 'bestanden.txt'.")
