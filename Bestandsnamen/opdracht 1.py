@@ -46,3 +46,77 @@ with open("bestanden.txt", "w", encoding="utf-8") as f:
         f.write(nieuw + "\n")
 
 print("Bestanden zijn hernoemd en opgeslagen in 'bestanden.txt'.")
+
+import os
+
+def is_afbeelding(bestand):
+    extensies = ('.jpg', '.jpeg', '.png', '.gif', '.bmp')
+    return bestand.lower().endswith(extensies)
+
+def hernoem_en_nummer():
+    mapnaam = input("Geef de naam van de map met afbeeldingen: ").strip()
+
+    if not os.path.isdir(mapnaam):
+        print("De opgegeven map bestaat niet.")
+        return
+
+    bestanden = [f for f in os.listdir(mapnaam) if os.path.isfile(os.path.join(mapnaam, f)) and is_afbeelding(f)]
+    bestanden.sort()  # Optioneel: alfabetisch sorteren voor consistentie
+
+    originele_namen = []
+
+    for i, oud in enumerate(bestanden, 1):
+        _, ext = os.path.splitext(oud)
+        nieuw = f"movie_poster_{i}{ext}"
+        os.rename(os.path.join(mapnaam, oud), os.path.join(mapnaam, nieuw))
+        originele_namen.append((nieuw, oud))
+
+    with open("originele_namen.txt", "w", encoding="utf-8") as f:
+        for nieuw, oud in originele_namen:
+            f.write(f"{nieuw}|{oud}\n")
+
+    print(f"{len(originele_namen)} bestanden zijn hernoemd en opgeslagen in 'originele_namen.txt'.")
+
+def herstel_bestandsnamen():
+    mapnaam = input("Geef de naam van de map met afbeeldingen: ").strip()
+
+    if not os.path.isdir(mapnaam):
+        print("De opgegeven map bestaat niet.")
+        return
+
+    if not os.path.isfile("originele_namen.txt"):
+        print("Het bestand 'originele_namen.txt' bestaat niet.")
+        return
+
+    met_open_fout = False
+    with open("originele_namen.txt", "r", encoding="utf-8") as f:
+        for regel in f:
+            try:
+                nieuw, oud = regel.strip().split("|")
+                oud_pad = os.path.join(mapnaam, nieuw)
+                nieuw_pad = os.path.join(mapnaam, oud)
+                if os.path.isfile(oud_pad):
+                    os.rename(oud_pad, nieuw_pad)
+            except Exception as e:
+                print(f"Fout bij hernoemen: {regel.strip()} ({e})")
+                met_open_fout = True
+
+    if not met_open_fout:
+        print("Alle bestanden zijn teruggezet naar hun originele namen.")
+    else:
+        print("Er traden enkele fouten op bij het herstellen van bestandsnamen.")
+
+def main():
+    print("1. Hernoem en nummer bestanden")
+    print("2. Hernoem bestanden naar originele naam")
+    keuze = input("Keuze? ").strip()
+
+    if keuze == "1":
+        hernoem_en_nummer()
+    elif keuze == "2":
+        herstel_bestandsnamen()
+    else:
+        print("Ongeldige keuze.")
+
+if __name__ == "__main__":
+    main()
