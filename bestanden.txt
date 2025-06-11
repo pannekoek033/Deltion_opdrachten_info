@@ -1,9 +1,0 @@
-movie_poster_1.jpg
-movie_poster_2.jpg
-movie_poster_3.jpg
-movie_poster_4.jpg
-movie_poster_5.jpg
-movie_poster_6.jpg
-movie_poster_7.jpg
-movie_poster_8.jpg
-movie_poster_9.jpg

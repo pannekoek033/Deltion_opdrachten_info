@@ -1,0 +1,2 @@
+Python v3.5 of hoger
+pillow python module. Doe dit middels dit commando: pip install Pillow
